@@ -43,9 +43,9 @@ class LandingViewModel(
 
             val dishesCount = initDishes(loadFromCache = loadFromCache)
 
-            delay(100L)
+            delay(1L)
             _uiState.value = ListLoading(isLoading = false)
-            delay(100L)
+            delay(1L)
             _uiState.value = Loading(false)
 
             if (citiesCount == 0 && dishesCount == 0) {
@@ -65,18 +65,22 @@ class LandingViewModel(
     // also by using this approach, we can show the result to users parallel-ly without let them
     // waiting too long for every api call is done
     // basically its all depends on the product requirements itself
-    private suspend fun initCities(
+    internal suspend fun initCities(
         loadFromCache: Boolean = false,
         isAddition: Boolean = true
     ): Int {
         val result = repository.loadListCities(loadFromCache = loadFromCache)
         if (!result.isSuccessful) {
             _uiState.value = LandingUiState.Error(Throwable(result.message()))
+            delay(1L)
+
             return EMPTY_DUE_ERROR
         }
 
         val res = result.body()
         res?.let {
+            if (it.isEmpty()) return@let
+
             val data = listOf(
                 LandingItem(
                     title = context.get()?.getString(
@@ -97,10 +101,10 @@ class LandingViewModel(
                 data = data,
                 addition = isAddition
             )
-            delay(100L)
+            delay(1L)
             _uiState.value = ListLoading(isLoading = true)
 
-            delay(100L)
+            delay(1L)
             showCacheMessageToast(result.raw())
             return data.count()
         }
@@ -115,11 +119,15 @@ class LandingViewModel(
         val result = repository.loadListDishes(loadFromCache = loadFromCache)
         if (!result.isSuccessful) {
             _uiState.value = LandingUiState.Error(Throwable(result.message()))
+            delay(1L)
+
             return EMPTY_DUE_ERROR
         }
 
         val res = result.body()
         res?.let {
+            if (it.isEmpty()) return@let
+
             val data = listOf(
                 LandingItem(
                     title = context.get()?.getString(
@@ -139,7 +147,7 @@ class LandingViewModel(
                 data = data,
                 addition = isAddition
             )
-            delay(100L)
+            delay(1L)
             _uiState.value = ListLoading(isLoading = true)
 
             showCacheMessageToast(result.raw())
@@ -149,9 +157,9 @@ class LandingViewModel(
         return 0
     }
 
-    private suspend fun showCacheMessageToast(rawResponse: okhttp3.Response) {
+    internal suspend fun showCacheMessageToast(rawResponse: okhttp3.Response) {
         if (CommonResponse.isResponseFromCache(rawResponse = rawResponse)) {
-            delay(100L)
+            delay(1L)
             _uiState.value = Toast(
                 context.get()?.getString(R.string.toast_message_data_from_cache) ?: ""
             )
