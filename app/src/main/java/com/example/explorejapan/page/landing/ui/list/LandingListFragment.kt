@@ -70,7 +70,11 @@ class LandingListFragment : Fragment() {
                                 binding.viewStateWidget.showCommonError()
                             }
                             is ListLoading -> {
-
+                               if (it.isLoading){
+                                   adapter.showLoading()
+                               } else {
+                                   adapter.hideLoading()
+                               }
                             }
                             is Loading -> {
                                 if (it.isLoading) {

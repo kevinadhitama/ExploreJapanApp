@@ -6,17 +6,22 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.explorejapan.databinding.LandingListItemBinding
 import com.example.explorejapan.databinding.LandingListItemHeaderBinding
+import com.example.explorejapan.databinding.LandingListItemLoaderBinding
 import com.example.explorejapan.datamodel.landing.LandingItem
+import com.example.explorejapan.datamodel.landing.LandingItemType
+import com.example.explorejapan.datamodel.landing.LandingItemType.CONTENT
+import com.example.explorejapan.datamodel.landing.LandingItemType.HEADER
+import com.example.explorejapan.datamodel.landing.LandingItemType.LOADER
 import com.example.explorejapan.listener.ItemClickListener
 import com.example.explorejapan.page.landing.ui.list.adapter.viewholder.ContentViewHolder
 import com.example.explorejapan.page.landing.ui.list.adapter.viewholder.HeaderViewHolder
-
-const val VIEW_TYPE_HEADER = 0
-const val VIEW_TYPE_CONTENT = 1
+import com.example.explorejapan.page.landing.ui.list.adapter.viewholder.LoaderViewHolder
 
 class LandingListAdapter : RecyclerView.Adapter<ViewHolder>() {
 
     private val dataSet: MutableList<LandingItem> = mutableListOf()
+    private val loaderItem = LandingItem(title = "", type = LOADER)
+    private var loaderPosition = -1
     var listener: ItemClickListener<LandingItem>? = null
 
     fun setDataSet(newDataSet: List<LandingItem>) {
@@ -34,35 +39,42 @@ class LandingListAdapter : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return when (viewType) {
-            VIEW_TYPE_HEADER -> {
-                HeaderViewHolder(
-                    LandingListItemHeaderBinding.inflate(inflater, parent, false)
-                )
-            }
-            else -> {
-                ContentViewHolder(
-                    LandingListItemBinding.inflate(inflater, parent, false)
-                )
-            }
+        return when (LandingItemType.from(viewType)) {
+            HEADER -> HeaderViewHolder(
+                LandingListItemHeaderBinding.inflate(inflater, parent, false)
+            )
+            CONTENT -> ContentViewHolder(
+                LandingListItemBinding.inflate(inflater, parent, false)
+            )
+            LOADER -> LoaderViewHolder(
+                LandingListItemLoaderBinding.inflate(inflater, parent, false)
+            )
         }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = dataSet[position]
-        when (holder.itemViewType) {
-            VIEW_TYPE_HEADER -> {
-                (holder as HeaderViewHolder).bind(data)
-            }
-            VIEW_TYPE_CONTENT -> {
-                (holder as ContentViewHolder).bind(position, data, listener)
-            }
+        when (LandingItemType.from(holder.itemViewType)) {
+            HEADER -> (holder as HeaderViewHolder).bind(data)
+            CONTENT -> (holder as ContentViewHolder).bind(position, data, listener)
+            LOADER -> (holder as LoaderViewHolder)
         }
     }
 
-    override fun getItemViewType(position: Int) =
-        if (dataSet[position].isHeader) VIEW_TYPE_HEADER else VIEW_TYPE_CONTENT
+    override fun getItemViewType(position: Int) = dataSet[position].type.value
 
     override fun getItemCount(): Int = dataSet.size
 
+    fun showLoading() {
+        hideLoading()
+        dataSet.add(loaderItem)
+        loaderPosition = dataSet.size - 1
+        notifyItemInserted(loaderPosition)
+    }
+
+    fun hideLoading() {
+        if (dataSet.remove(loaderItem)) {
+            notifyItemRemoved(loaderPosition)
+        }
+    }
 }

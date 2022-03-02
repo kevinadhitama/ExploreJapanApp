@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/landingListItemLoader"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background_gray"
+    android:indeterminate="true"
+    android:indeterminateTint="@color/purple_500"
+    android:paddingHorizontal="@dimen/spacing_standard"
+    android:paddingVertical="@dimen/spacing_standard"
+    tools:text="Header Item Title" />

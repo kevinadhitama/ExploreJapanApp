@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.explorejapan.R
 import com.example.explorejapan.datamodel.landing.LandingItem
+import com.example.explorejapan.datamodel.landing.LandingItemType
 import com.example.explorejapan.network.CommonResponse
 import com.example.explorejapan.page.landing.vm.LandingUiState.Empty
 import com.example.explorejapan.page.landing.vm.LandingUiState.ErrorPage
@@ -76,16 +77,17 @@ class LandingViewModel(
         res?.let {
             val data = listOf(
                 LandingItem(
-                    isHeader = true,
                     title = context.get()?.getString(
                         R.string.section_title_main_cities_japan
-                    ) ?: ""
+                    ) ?: "",
+                    type = LandingItemType.HEADER
                 )
             ).plus(res.map {
                 LandingItem(
                     title = it.name,
                     imageUrl = it.image,
-                    description = it.description
+                    description = it.description,
+                    type = LandingItemType.CONTENT
                 )
             })
 
@@ -96,6 +98,7 @@ class LandingViewModel(
             delay(100L)
             _uiState.value = ListLoading(isLoading = true)
 
+            delay(100L)
             showCacheMessageToast(result.raw())
             return data.count()
         }
@@ -117,15 +120,16 @@ class LandingViewModel(
         res?.let {
             val data = listOf(
                 LandingItem(
-                    isHeader = true,
                     title = context.get()?.getString(
                         R.string.section_title_popular_japanese_food
-                    ) ?: ""
+                    ) ?: "",
+                    type = LandingItemType.HEADER
                 )
             ).plus(res.map {
                 LandingItem(
                     title = it.name,
-                    imageUrl = it.image
+                    imageUrl = it.image,
+                    type = LandingItemType.CONTENT
                 )
             })
 

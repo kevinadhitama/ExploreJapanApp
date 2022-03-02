@@ -10,4 +10,5 @@
 
     <color name="color_text_title">#4A4A4A</color>
     <color name="color_text_desc">#929292</color>
+    <color name="background_gray">#F4F4F4</color>
 </resources>

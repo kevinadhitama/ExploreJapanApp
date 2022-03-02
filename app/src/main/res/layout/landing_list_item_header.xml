@@ -6,6 +6,6 @@
     android:layout_height="wrap_content"
     android:paddingVertical="@dimen/spacing_standard"
     android:paddingHorizontal="@dimen/spacing_standard"
-    android:background="#F4F4F4"
+    android:background="@color/background_gray"
     android:textAppearance="?attr/textAppearanceBody1"
     tools:text="Header Item Title" />
