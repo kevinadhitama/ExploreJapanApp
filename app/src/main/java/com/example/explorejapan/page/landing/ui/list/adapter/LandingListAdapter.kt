@@ -26,8 +26,10 @@ class LandingListAdapter : RecyclerView.Adapter<ViewHolder>() {
 
     fun setDataSet(newDataSet: List<LandingItem>) {
         val prevSize = dataSet.size
-        dataSet.clear()
-        notifyItemRangeRemoved(0, prevSize)
+        if (prevSize > 0) {
+            dataSet.clear()
+            notifyItemRangeRemoved(0, prevSize)
+        }
         dataSet.addAll(newDataSet)
         notifyItemRangeInserted(0, newDataSet.size)
     }

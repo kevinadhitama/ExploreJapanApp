@@ -1,5 +1,6 @@
 package com.example.explorejapan.page.landing.ui.list
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +34,13 @@ class LandingListFragment : Fragment() {
     private lateinit var binding: LandingListFragmentBinding
     private lateinit var adapter: LandingListAdapter
     private val viewModel: LandingViewModel by activityViewModels()
+    private var loadFromCache: Boolean = true
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        //load from cache only if fragment already attached before
+        loadFromCache = false
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,8 +56,9 @@ class LandingListFragment : Fragment() {
         initRecyclerView()
         initViewStateWidget()
         initSwipeToRefresh()
+        viewModel.reloadLanding(loadFromCache = savedInstanceState != null || loadFromCache)
+        loadFromCache = true
 
-        viewModel.reloadLanding(savedInstanceState != null)
         with(viewLifecycleOwner) {
             this.lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
