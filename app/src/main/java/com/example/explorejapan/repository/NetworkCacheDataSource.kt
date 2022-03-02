@@ -17,7 +17,6 @@ class NetworkCacheDataSource(
 
     suspend fun putCache(endpoint: String, result: Any) = withContext(defaultDispatcher) {
         val gson = GsonBuilder().create()
-        gson.toJson(result)
 
         db.networkCacheDAO().delete(endpoint)
         db.networkCacheDAO().insert(
