@@ -2,10 +2,12 @@ package com.example.explorejapan.page.landing.ui.list
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Layout.Directions
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast.LENGTH_LONG
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -116,7 +118,15 @@ class LandingListFragment : Fragment() {
         binding.recyclerView.itemAnimator = DefaultItemAnimator()
         adapter.listener = object : ItemClickListener<LandingItem> {
             override fun onItemClickListener(position: Int, item: LandingItem) {
-                findNavController().navigate(R.id.action_landingListFragment_to_landingDetailFragment)
+                viewModel.selectedItem = item
+
+                val bundle = bundleOf(
+                    "title" to context?.getString(R.string.app_name) + " - " + item.title
+                )
+                findNavController().navigate(
+                    R.id.action_landingListFragment_to_landingDetailFragment,
+                    bundle
+                )
             }
         }
     }

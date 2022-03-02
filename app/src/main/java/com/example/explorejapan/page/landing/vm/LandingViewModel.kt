@@ -33,6 +33,8 @@ class LandingViewModel(
         MutableStateFlow<LandingUiState>(Loading(true))
     val uiState: StateFlow<LandingUiState> = _uiState
 
+    var selectedItem: LandingItem? = null
+
     fun reloadLanding(loadFromCache: Boolean = false, showLoading: Boolean = true) {
         _uiState.value = Loading(showLoading && !loadFromCache)
         viewModelScope.launch(dispatcher) {
@@ -169,5 +171,7 @@ sealed class LandingUiState {
     data class Error(val exception: Throwable) : LandingUiState()
     //ErrorPage: only for all api error (blocking the users since no result to show anyway)
     object ErrorPage : LandingUiState()
+    //Toast: currently showing toast for the sake of we know that its from cache, might be
+    // annoying to see it keep showing
     data class Toast(val text: String) : LandingUiState()
 }

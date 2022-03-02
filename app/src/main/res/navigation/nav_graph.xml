@@ -10,10 +10,18 @@
         android:label="@string/app_name">
         <action
             android:id="@+id/action_landingListFragment_to_landingDetailFragment"
-            app:destination="@+id/landingDetailFragment" />
+            app:destination="@+id/landingDetailFragment" >
+            <argument
+                android:name="title"
+                app:argType="string" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/landingDetailFragment"
         android:name="com.example.explorejapan.page.landing.ui.detail.LandingDetailFragment"
-        android:label="" />
+        android:label="{title}" >
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </fragment>
 </navigation>

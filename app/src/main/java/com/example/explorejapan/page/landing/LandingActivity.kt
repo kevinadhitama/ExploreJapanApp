@@ -22,4 +22,9 @@ class LandingActivity : AppCompatActivity(R.layout.landing_activity) {
     override fun getDefaultViewModelProviderFactory(): Factory {
         return LandingViewModelFactory(this)
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
 }
