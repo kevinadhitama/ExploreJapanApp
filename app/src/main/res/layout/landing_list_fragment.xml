@@ -13,4 +13,9 @@
         tools:itemCount="2"
         tools:listitem="@layout/landing_list_item" />
 
+    <com.example.explorejapan.widget.ErrorStateWidget
+        android:id="@+id/errorStateWidget"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,4 +3,8 @@
     <string name="section_title_main_cities_japan">Main Cities in Japan</string>
     <string name="section_title_popular_japanese_food">Most Popular Japanese Food</string>
 
+    <string name="error_retry_button">Retry</string>
+    <string name="error_message_desc">An Alien is probably blocking your signal.</string>
+    <string name="error_message_title">Something Went Wrong..</string>
+
 </resources>

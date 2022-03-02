@@ -57,20 +57,17 @@ class LandingListFragment : Fragment() {
                         Empty -> {
 
                         }
-                        is Error -> {
-
-                        }
                         is LandingUiState.Error -> {
 
                         }
                         ErrorPage -> {
-
+                            binding.errorStateWidget.show()
                         }
                         is ListLoading -> {
 
                         }
                         is Loading -> {
-
+                            binding.errorStateWidget.hide()
                         }
                     }
                 }
