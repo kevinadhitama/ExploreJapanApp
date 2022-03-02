@@ -6,6 +6,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 
 const val API_PATH = "https://api.npoint.io/"
 const val CITIES_PATH = "e81570e822b273f0a366"
@@ -23,10 +25,16 @@ interface APIService {
 
         var apiService: APIService? = null
         fun getInstance(): APIService {
+            val client = OkHttpClient.Builder()
+            client.connectTimeout(15, TimeUnit.SECONDS)
+            client.readTimeout(15, TimeUnit.SECONDS)
+            client.writeTimeout(15, TimeUnit.SECONDS)
+
             if (apiService == null) {
                 val retrofit = Retrofit.Builder()
                     .baseUrl(API_PATH)
                     .addConverterFactory(GsonConverterFactory.create())
+                    .client(client.build())
                     .build()
                 apiService = retrofit.create(APIService::class.java)
 
