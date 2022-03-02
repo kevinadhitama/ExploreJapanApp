@@ -6,12 +6,12 @@
     android:background="@android:color/white">
 
     <ImageView
-        android:id="@+id/image_view_error"
+        android:id="@+id/imageViewError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:contentDescription="@null"
         android:layout_marginHorizontal="@dimen/spacing_large"
-        app:layout_constraintBottom_toTopOf="@+id/text_view_title"
+        app:layout_constraintBottom_toTopOf="@+id/textViewTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -19,7 +19,7 @@
         app:srcCompat="@drawable/bg_nointernet_connection" />
 
     <TextView
-        android:id="@+id/text_view_title"
+        android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_large"
@@ -32,13 +32,13 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toTopOf="@+id/text_view_desc"
+        app:layout_constraintBottom_toTopOf="@+id/textViewDesc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_view_error" />
+        app:layout_constraintTop_toBottomOf="@+id/imageViewError" />
 
     <TextView
-        android:id="@+id/text_view_desc"
+        android:id="@+id/textViewDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_large"
@@ -53,7 +53,7 @@
         app:layout_constraintBottom_toTopOf="@+id/button_retry"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_title" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_retry"

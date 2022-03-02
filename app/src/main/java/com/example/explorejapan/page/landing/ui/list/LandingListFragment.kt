@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast.LENGTH_LONG
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -22,6 +23,7 @@ import com.example.explorejapan.page.landing.vm.LandingUiState.ErrorPage
 import com.example.explorejapan.page.landing.vm.LandingUiState.ListLoading
 import com.example.explorejapan.page.landing.vm.LandingUiState.Loading
 import com.example.explorejapan.page.landing.vm.LandingUiState.Success
+import com.example.explorejapan.page.landing.vm.LandingUiState.Toast
 import com.example.explorejapan.page.landing.vm.LandingViewModel
 import com.example.explorejapan.widget.ErrorStateWidget.Listener
 import kotlinx.coroutines.launch
@@ -69,7 +71,15 @@ class LandingListFragment : Fragment() {
 
                         }
                         is Loading -> {
-                            binding.errorStateWidget.hide()
+                            if (it.isLoading) {
+                                binding.loadingStateWidget.show()
+                            } else {
+                                binding.loadingStateWidget.hide()
+                                binding.errorStateWidget.hide()
+                            }
+                        }
+                        is Toast -> {
+                            android.widget.Toast.makeText(context, it.text, LENGTH_LONG).show()
                         }
                     }
                 }

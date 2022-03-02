@@ -6,4 +6,5 @@
     <dimen name="spacing_standard">8dp</dimen>
     <dimen name="spacing_small">4dp</dimen>
     <dimen name="spacing_extra_small">2dp</dimen>
+    <dimen name="dimen_landing_banner_size">88dp</dimen>
 </resources>

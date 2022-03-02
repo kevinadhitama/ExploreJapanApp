@@ -5,10 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.explorejapan.R
 import com.example.explorejapan.datamodel.landing.LandingItem
+import com.example.explorejapan.network.CommonResponse
 import com.example.explorejapan.page.landing.vm.LandingUiState.Empty
 import com.example.explorejapan.page.landing.vm.LandingUiState.ErrorPage
 import com.example.explorejapan.page.landing.vm.LandingUiState.ListLoading
 import com.example.explorejapan.page.landing.vm.LandingUiState.Loading
+import com.example.explorejapan.page.landing.vm.LandingUiState.Toast
 import com.example.explorejapan.repository.LandingRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -42,9 +44,9 @@ class LandingViewModel(
             val dishesCount = initDishes()
 
 
-            ListLoading(isLoading = false)
+            _uiState.value = ListLoading(isLoading = false)
             delay(100L)
-            Loading(false)
+            _uiState.value = Loading(false)
 
             if (citiesCount == 0 && dishesCount == 0) {
                 _uiState.value = Empty
@@ -86,6 +88,8 @@ class LandingViewModel(
             )
             delay(100L)
             _uiState.value = ListLoading(isLoading = true)
+
+            showCacheMessageToast(result.raw())
             return data.count()
         }
 
@@ -122,10 +126,20 @@ class LandingViewModel(
             delay(100L)
             _uiState.value = ListLoading(isLoading = true)
 
+            showCacheMessageToast(result.raw())
             return data.count()
         }
 
         return 0
+    }
+
+    private suspend fun showCacheMessageToast(rawResponse: okhttp3.Response) {
+        if (CommonResponse.isResponseFromCache(rawResponse = rawResponse)) {
+            delay(100L)
+            _uiState.value = Toast(
+                context.get()?.getString(R.string.toast_message_data_from_cache) ?: ""
+            )
+        }
     }
 }
 
@@ -136,4 +150,5 @@ sealed class LandingUiState {
     object Empty : LandingUiState()
     data class Error(val exception: Throwable) : LandingUiState()
     object ErrorPage : LandingUiState()
+    data class Toast(val text: String) : LandingUiState()
 }

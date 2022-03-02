@@ -7,4 +7,6 @@
     <string name="error_message_desc">An Alien is probably blocking your signal.</string>
     <string name="error_message_title">Something Went Wrong..</string>
 
+    <string name="toast_message_data_from_cache">Data retrieved from cache, you may reload it for latest result :)</string>
+
 </resources>

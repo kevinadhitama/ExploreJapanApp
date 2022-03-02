@@ -11,5 +11,9 @@ class CommonResponse {
                 errorCode, (message
                     ?: "something went wrong").toResponseBody()
             )
+
+        fun isResponseFromCache(rawResponse: okhttp3.Response) =
+            rawResponse.request.url.host == "localhost"
+
     }
 }

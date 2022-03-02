@@ -13,9 +13,15 @@
         tools:itemCount="2"
         tools:listitem="@layout/landing_list_item" />
 
+    <com.example.explorejapan.page.landing.ui.list.widget.LandingListShimmeringLoadingWidget
+        android:id="@+id/loadingStateWidget"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <com.example.explorejapan.widget.ErrorStateWidget
         android:id="@+id/errorStateWidget"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
