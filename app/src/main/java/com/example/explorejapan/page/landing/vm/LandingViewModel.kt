@@ -155,10 +155,15 @@ class LandingViewModel(
 
 sealed class LandingUiState {
     data class Success(val data: List<LandingItem>, val addition: Boolean = true) : LandingUiState()
+    //Loading: only for state when no result yet retrieved from api (blocking the users)
     data class Loading(val isLoading: Boolean) : LandingUiState()
+    //ListLoading: only for showing loading for single api call (will not blocking the users)
     data class ListLoading(val isLoading: Boolean) : LandingUiState()
+    //Empty: only for showing empty state caused by no data at all returned from api
     object Empty : LandingUiState()
+    //Error: only for single api error (will not blocking the users)
     data class Error(val exception: Throwable) : LandingUiState()
+    //ErrorPage: only for all api error (blocking the users since no result to show anyway)
     object ErrorPage : LandingUiState()
     data class Toast(val text: String) : LandingUiState()
 }

@@ -17,7 +17,6 @@ import com.example.explorejapan.databinding.LandingListFragmentBinding
 import com.example.explorejapan.datamodel.landing.LandingItem
 import com.example.explorejapan.listener.ItemClickListener
 import com.example.explorejapan.page.landing.ui.list.adapter.LandingListAdapter
-import com.example.explorejapan.page.landing.vm.LandingUiState
 import com.example.explorejapan.page.landing.vm.LandingUiState.Empty
 import com.example.explorejapan.page.landing.vm.LandingUiState.ErrorPage
 import com.example.explorejapan.page.landing.vm.LandingUiState.ListLoading
@@ -62,9 +61,6 @@ class LandingListFragment : Fragment() {
                                 }
                             }
                             Empty -> {
-
-                            }
-                            is LandingUiState.Error -> {
 
                             }
                             ErrorPage -> {
