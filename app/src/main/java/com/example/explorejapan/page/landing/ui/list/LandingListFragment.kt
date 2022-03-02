@@ -23,6 +23,7 @@ import com.example.explorejapan.page.landing.vm.LandingUiState.ListLoading
 import com.example.explorejapan.page.landing.vm.LandingUiState.Loading
 import com.example.explorejapan.page.landing.vm.LandingUiState.Success
 import com.example.explorejapan.page.landing.vm.LandingViewModel
+import com.example.explorejapan.widget.ErrorStateWidget.Listener
 import kotlinx.coroutines.launch
 
 class LandingListFragment : Fragment() {
@@ -43,6 +44,7 @@ class LandingListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
+        initErrorStateWidget()
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
@@ -81,6 +83,14 @@ class LandingListFragment : Fragment() {
         adapter.listener = object : ItemClickListener<LandingItem> {
             override fun onItemClickListener(position: Int, item: LandingItem) {
                 findNavController().navigate(R.id.action_landingListFragment_to_landingDetailFragment)
+            }
+        }
+    }
+
+    private fun initErrorStateWidget() {
+        binding.errorStateWidget.mListener = object : Listener {
+            override fun onRetryClickListener() {
+                viewModel.reloadLanding()
             }
         }
     }

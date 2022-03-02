@@ -23,7 +23,7 @@ const val EMPTY_DUE_ERROR = -1
 class LandingViewModel(
     private val context: WeakReference<Context>,
     private val repository: LandingRepository,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     private val _uiState =
@@ -31,11 +31,21 @@ class LandingViewModel(
     val uiState: StateFlow<LandingUiState> = _uiState
 
     init {
+        reloadLanding()
+    }
+
+    fun reloadLanding() {
         viewModelScope.launch(dispatcher) {
             val citiesCount = initCities(isAddition = false)
+            if (citiesCount > 0) _uiState.value = Loading(false)
+
             val dishesCount = initDishes()
 
+
             ListLoading(isLoading = false)
+            delay(100L)
+            Loading(false)
+
             if (citiesCount == 0 && dishesCount == 0) {
                 _uiState.value = Empty
             }
