@@ -31,7 +31,7 @@ class NetworkCacheDataSource(
     suspend fun <T : Any> loadCache(endpoint: String, clazzType: Type): T? =
         withContext(defaultDispatcher) {
             val gson = GsonBuilder().create()
-            val data = db.networkCacheDAO().findByEndpoint(endpoint)
-            gson.fromJson(data[0].result, clazzType)
+            val data = db.networkCacheDAO().findByEndpoint(endpoint).firstOrNull()
+            gson.fromJson(data?.result, clazzType)
         }
 }
