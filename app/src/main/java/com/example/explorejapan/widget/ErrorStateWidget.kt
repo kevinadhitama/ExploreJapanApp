@@ -33,10 +33,6 @@ class ErrorStateWidget(context: Context, attrs: AttributeSet) : FrameLayout(cont
         }
     }
 
-    fun setListener(listener: Listener?) {
-        mListener = listener
-    }
-
     fun show() {
         visibility = VISIBLE
     }
