@@ -46,6 +46,7 @@ class LandingListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         initErrorStateWidget()
+        initSwipeToRefresh()
 
         viewModel.reloadLanding(savedInstanceState != null)
         with(viewLifecycleOwner) {
@@ -59,6 +60,7 @@ class LandingListFragment : Fragment() {
                                 } else {
                                     adapter.setDataSet(it.data)
                                 }
+                                binding.swipeRefresh.isRefreshing = false
                             }
                             Empty -> {
 
@@ -84,6 +86,12 @@ class LandingListFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    private fun initSwipeToRefresh() {
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.reloadLanding(showLoading = false)
         }
     }
 

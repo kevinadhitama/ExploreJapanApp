@@ -32,8 +32,8 @@ class LandingViewModel(
         MutableStateFlow<LandingUiState>(Loading(true))
     val uiState: StateFlow<LandingUiState> = _uiState
 
-    fun reloadLanding(loadFromCache: Boolean = false) {
-        _uiState.value = Loading(true)
+    fun reloadLanding(loadFromCache: Boolean = false, showLoading: Boolean = true) {
+        _uiState.value = Loading(showLoading)
         viewModelScope.launch(dispatcher) {
             val citiesCount = initCities(loadFromCache = loadFromCache, isAddition = false)
             if (citiesCount > 0) _uiState.value = Loading(false)
