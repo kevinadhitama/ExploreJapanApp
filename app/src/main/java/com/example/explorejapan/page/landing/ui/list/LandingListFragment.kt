@@ -31,8 +31,8 @@ import kotlinx.coroutines.launch
 class LandingListFragment : Fragment() {
 
     private lateinit var binding: LandingListFragmentBinding
+    private lateinit var adapter: LandingListAdapter
     private val viewModel: LandingViewModel by activityViewModels()
-    private val adapter: LandingListAdapter = LandingListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,39 +47,43 @@ class LandingListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         initErrorStateWidget()
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect {
-                    when (it) {
-                        is Success -> {
-                            if (it.addition) {
-                                adapter.addDataSet(it.data)
-                            } else {
-                                adapter.setDataSet(it.data)
+
+        viewModel.reloadLanding(savedInstanceState != null)
+        with(viewLifecycleOwner) {
+            this.lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.uiState.collect {
+                        when (it) {
+                            is Success -> {
+                                if (it.addition) {
+                                    adapter.addDataSet(it.data)
+                                } else {
+                                    adapter.setDataSet(it.data)
+                                }
                             }
-                        }
-                        Empty -> {
+                            Empty -> {
 
-                        }
-                        is LandingUiState.Error -> {
-
-                        }
-                        ErrorPage -> {
-                            binding.errorStateWidget.show()
-                        }
-                        is ListLoading -> {
-
-                        }
-                        is Loading -> {
-                            if (it.isLoading) {
-                                binding.loadingStateWidget.show()
-                            } else {
-                                binding.loadingStateWidget.hide()
-                                binding.errorStateWidget.hide()
                             }
-                        }
-                        is Toast -> {
-                            android.widget.Toast.makeText(context, it.text, LENGTH_LONG).show()
+                            is LandingUiState.Error -> {
+
+                            }
+                            ErrorPage -> {
+                                binding.errorStateWidget.show()
+                            }
+                            is ListLoading -> {
+
+                            }
+                            is Loading -> {
+                                if (it.isLoading) {
+                                    binding.loadingStateWidget.show()
+                                } else {
+                                    binding.loadingStateWidget.hide()
+                                    binding.errorStateWidget.hide()
+                                }
+                            }
+                            is Toast -> {
+                                android.widget.Toast.makeText(context, it.text, LENGTH_LONG).show()
+                            }
                         }
                     }
                 }
@@ -88,6 +92,7 @@ class LandingListFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
+        adapter = LandingListAdapter()
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         binding.recyclerView.adapter = adapter
         adapter.listener = object : ItemClickListener<LandingItem> {
