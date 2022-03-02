@@ -8,7 +8,7 @@ import android.widget.FrameLayout
 import com.example.explorejapan.R
 import com.example.explorejapan.databinding.WidgetErrorStateBinding
 
-class ErrorStateWidget(context: Context, attrs: AttributeSet) : FrameLayout(context, attrs) {
+class ViewStateWidget(context: Context, attrs: AttributeSet) : FrameLayout(context, attrs) {
 
     lateinit var mBinding: WidgetErrorStateBinding
     var mListener: Listener? = null
@@ -33,11 +33,21 @@ class ErrorStateWidget(context: Context, attrs: AttributeSet) : FrameLayout(cont
         }
     }
 
-    fun show() {
+    fun showCommonEmpty() {
+        mBinding.textViewTitle.text = context.getString(R.string.view_state_error_message_title)
+        mBinding.textViewDesc.text = context.getString(R.string.view_state_error_message_desc)
+        visibility = VISIBLE
+    }
+
+    fun showCommonError() {
+        mBinding.textViewTitle.text = context.getString(R.string.view_state_error_message_title)
+        mBinding.textViewDesc.text = context.getString(R.string.view_state_error_message_desc)
         visibility = VISIBLE
     }
 
     fun hide() {
+        mBinding.textViewTitle.text = ""
+        mBinding.textViewDesc.text = ""
         visibility = GONE
     }
 

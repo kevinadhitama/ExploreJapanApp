@@ -3,9 +3,11 @@
     <string name="section_title_main_cities_japan">Main Cities in Japan</string>
     <string name="section_title_popular_japanese_food">Most Popular Japanese Food</string>
 
-    <string name="error_retry_button">Retry</string>
-    <string name="error_message_desc">An Alien is probably blocking your signal.</string>
-    <string name="error_message_title">Something Went Wrong..</string>
+    <string name="view_state_retry_button">Retry</string>
+    <string name="view_state_empty_message_title">We got nothing to show..</string>
+    <string name="view_state_empty_message_desc">An Alien is probably stole the result.</string>
+    <string name="view_state_error_message_title">Something Went Wrong..</string>
+    <string name="view_state_error_message_desc">An Alien is probably blocking your signal.</string>
 
     <string name="toast_message_data_from_cache">Data retrieved from cache, you may reload it for latest result :)</string>
 

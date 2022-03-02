@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.explorejapan.R
 import com.example.explorejapan.databinding.LandingListFragmentBinding
@@ -24,7 +25,7 @@ import com.example.explorejapan.page.landing.vm.LandingUiState.Loading
 import com.example.explorejapan.page.landing.vm.LandingUiState.Success
 import com.example.explorejapan.page.landing.vm.LandingUiState.Toast
 import com.example.explorejapan.page.landing.vm.LandingViewModel
-import com.example.explorejapan.widget.ErrorStateWidget.Listener
+import com.example.explorejapan.widget.ViewStateWidget.Listener
 import kotlinx.coroutines.launch
 
 class LandingListFragment : Fragment() {
@@ -45,7 +46,7 @@ class LandingListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
-        initErrorStateWidget()
+        initViewStateWidget()
         initSwipeToRefresh()
 
         viewModel.reloadLanding(savedInstanceState != null)
@@ -63,10 +64,10 @@ class LandingListFragment : Fragment() {
                                 binding.swipeRefresh.isRefreshing = false
                             }
                             Empty -> {
-
+                                binding.viewStateWidget.showCommonEmpty()
                             }
                             ErrorPage -> {
-                                binding.errorStateWidget.show()
+                                binding.viewStateWidget.showCommonError()
                             }
                             is ListLoading -> {
 
@@ -76,7 +77,7 @@ class LandingListFragment : Fragment() {
                                     binding.loadingStateWidget.show()
                                 } else {
                                     binding.loadingStateWidget.hide()
-                                    binding.errorStateWidget.hide()
+                                    binding.viewStateWidget.hide()
                                 }
                             }
                             is Toast -> {
@@ -99,6 +100,7 @@ class LandingListFragment : Fragment() {
         adapter = LandingListAdapter()
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         binding.recyclerView.adapter = adapter
+        binding.recyclerView.itemAnimator = DefaultItemAnimator()
         adapter.listener = object : ItemClickListener<LandingItem> {
             override fun onItemClickListener(position: Int, item: LandingItem) {
                 findNavController().navigate(R.id.action_landingListFragment_to_landingDetailFragment)
@@ -106,8 +108,8 @@ class LandingListFragment : Fragment() {
         }
     }
 
-    private fun initErrorStateWidget() {
-        binding.errorStateWidget.mListener = object : Listener {
+    private fun initViewStateWidget() {
+        binding.viewStateWidget.mListener = object : Listener {
             override fun onRetryClickListener() {
                 viewModel.reloadLanding()
             }

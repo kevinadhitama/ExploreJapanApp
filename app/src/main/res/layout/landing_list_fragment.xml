@@ -25,8 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.example.explorejapan.widget.ErrorStateWidget
-        android:id="@+id/errorStateWidget"
+    <com.example.explorejapan.widget.ViewStateWidget
+        android:id="@+id/viewStateWidget"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:visibility="gone" />
