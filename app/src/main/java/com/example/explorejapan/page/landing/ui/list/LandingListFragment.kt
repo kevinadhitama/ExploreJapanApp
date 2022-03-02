@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast.LENGTH_LONG
+import android.widget.Toast.LENGTH_SHORT
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -96,7 +97,7 @@ class LandingListFragment : Fragment() {
                                 }
                             }
                             is Toast -> {
-                                android.widget.Toast.makeText(context, it.text, LENGTH_LONG).show()
+                                android.widget.Toast.makeText(context, it.text, LENGTH_SHORT).show()
                             }
                         }
                     }
