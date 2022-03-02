@@ -2,7 +2,6 @@ package com.example.explorejapan.repository
 
 import android.content.Context
 import com.example.explorejapan.network.APIService
-import com.example.explorejapan.network.CITIES_PATH
 import com.example.explorejapan.network.CommonResponse
 import com.example.explorejapan.network.DISHES_PATH
 import com.example.explorejapan.network.model.DishCollection
@@ -19,32 +18,56 @@ class DishesDataSource(
     private val networkCacheDataSource: NetworkCacheDataSource = NetworkCacheDataSource(context)
 ) {
 
-    suspend fun loadListDishes(): Response<List<DishCollection>> = withContext(defaultDispatcher) {
-        try {
-            val res = apiService.getDishes()
-
-            if (res.isSuccessful) {
-                res.body()?.let {
-                    networkCacheDataSource.putCache(DISHES_PATH, it)
+    suspend fun loadListDishes(loadFromCache: Boolean = false): Response<List<DishCollection>> =
+        withContext(defaultDispatcher) {
+            try {
+                val cache = loadDishesFromCache()
+                if (loadFromCache && cache != null) {
+                    return@withContext CommonResponse.getSuccessResponse(
+                        body = cache
+                    )
                 }
-                res
-            } else {
-                loadDishesFromCache(res)
+
+                val res = apiService.getDishes()
+
+                if (res.isSuccessful) {
+                    res.body()?.let {
+                        networkCacheDataSource.putCache(DISHES_PATH, it)
+                    }
+                    res
+                } else {
+                    loadDishesFromCache(cache = cache, res = res)
+                }
+            } catch (ex: Exception) {
+                loadDishesFromCache(CommonResponse.getErrorResponse(message = ex.message))
             }
-        } catch (ex: Exception) {
-            loadDishesFromCache(CommonResponse.getErrorResponse(message = ex.message))
+        }
+
+    private fun loadDishesFromCache(
+        cache: List<DishCollection>?,
+        res: Response<List<DishCollection>>
+    ):
+        Response<List<DishCollection>> {
+        cache?.let {
+            return Response.success(it)
+        } ?: run {
+            return res
         }
     }
 
     private suspend fun loadDishesFromCache(res: Response<List<DishCollection>>):
         Response<List<DishCollection>> {
-        networkCacheDataSource.loadCache<List<DishCollection>>(
-            DISHES_PATH,
-            object : TypeToken<List<DishCollection>>() {}.type
-        )?.let {
+        loadDishesFromCache()?.let {
             return Response.success(it)
         } ?: run {
             return res
         }
+    }
+
+    private suspend fun loadDishesFromCache(): List<DishCollection>? {
+        return networkCacheDataSource.loadCache(
+            DISHES_PATH,
+            object : TypeToken<List<DishCollection>>() {}.type
+        )
     }
 }

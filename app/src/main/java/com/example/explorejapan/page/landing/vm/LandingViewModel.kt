@@ -32,18 +32,15 @@ class LandingViewModel(
         MutableStateFlow<LandingUiState>(Loading(true))
     val uiState: StateFlow<LandingUiState> = _uiState
 
-    init {
-        reloadLanding()
-    }
-
-    fun reloadLanding() {
+    fun reloadLanding(loadFromCache: Boolean = false) {
+        _uiState.value = Loading(true)
         viewModelScope.launch(dispatcher) {
-            val citiesCount = initCities(isAddition = false)
+            val citiesCount = initCities(loadFromCache = loadFromCache, isAddition = false)
             if (citiesCount > 0) _uiState.value = Loading(false)
 
-            val dishesCount = initDishes()
+            val dishesCount = initDishes(loadFromCache = loadFromCache)
 
-
+            delay(100L)
             _uiState.value = ListLoading(isLoading = false)
             delay(100L)
             _uiState.value = Loading(false)
@@ -58,8 +55,18 @@ class LandingViewModel(
         }
     }
 
-    private suspend fun initCities(isAddition: Boolean = true): Int {
-        val result = repository.loadListCities()
+    // my consideration for not combining the result from cities and dishes on repository is
+    // because of the support for future improvement
+    // in this case init cities and init dishes might be look similar, for future case with
+    // another api call for each section with different data model might be more handy this approach
+    // also by using this approach, we can show the result to users parallel-ly without let them
+    // waiting too long for every api call is done
+    // basically its all depends on the product requirements itself
+    private suspend fun initCities(
+        loadFromCache: Boolean = false,
+        isAddition: Boolean = true
+    ): Int {
+        val result = repository.loadListCities(loadFromCache = loadFromCache)
         if (!result.isSuccessful) {
             _uiState.value = LandingUiState.Error(Throwable(result.message()))
             return EMPTY_DUE_ERROR
@@ -96,8 +103,11 @@ class LandingViewModel(
         return 0
     }
 
-    private suspend fun initDishes(isAddition: Boolean = true): Int {
-        val result = repository.loadListDishes()
+    private suspend fun initDishes(
+        loadFromCache: Boolean = false,
+        isAddition: Boolean = true
+    ): Int {
+        val result = repository.loadListDishes(loadFromCache = loadFromCache)
         if (!result.isSuccessful) {
             _uiState.value = LandingUiState.Error(Throwable(result.message()))
             return EMPTY_DUE_ERROR

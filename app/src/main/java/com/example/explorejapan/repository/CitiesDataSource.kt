@@ -18,32 +18,56 @@ class CitiesDataSource(
     private val networkCacheDataSource: NetworkCacheDataSource = NetworkCacheDataSource(context)
 ) {
 
-    suspend fun loadListCity(): Response<List<CityCollection>> = withContext(defaultDispatcher) {
-        try {
-            val res = apiService.getCities()
-
-            if (res.isSuccessful) {
-                res.body()?.let {
-                    networkCacheDataSource.putCache(CITIES_PATH, it)
+    suspend fun loadListCity(loadFromCache: Boolean = false): Response<List<CityCollection>> =
+        withContext(defaultDispatcher) {
+            try {
+                val cache = loadCityFromCache()
+                if (loadFromCache && cache != null) {
+                    return@withContext CommonResponse.getSuccessResponse(
+                        body = cache
+                    )
                 }
-                res
-            } else {
-                loadCityFromCache(res)
+
+                val res = apiService.getCities()
+
+                if (res.isSuccessful) {
+                    res.body()?.let {
+                        networkCacheDataSource.putCache(CITIES_PATH, it)
+                    }
+                    res
+                } else {
+                    loadCityFromCache(cache = cache, res = res)
+                }
+            } catch (ex: Exception) {
+                loadCityFromCache(CommonResponse.getErrorResponse(message = ex.message))
             }
-        } catch (ex: Exception) {
-            loadCityFromCache(CommonResponse.getErrorResponse(message = ex.message))
+        }
+
+    private fun loadCityFromCache(
+        cache: List<CityCollection>?,
+        res: Response<List<CityCollection>>
+    ):
+        Response<List<CityCollection>> {
+        cache?.let {
+            return Response.success(it)
+        } ?: run {
+            return res
         }
     }
 
     private suspend fun loadCityFromCache(res: Response<List<CityCollection>>):
         Response<List<CityCollection>> {
-        networkCacheDataSource.loadCache<List<CityCollection>>(
-            CITIES_PATH,
-            object : TypeToken<List<CityCollection>>() {}.type
-        )?.let {
+        loadCityFromCache()?.let {
             return Response.success(it)
         } ?: run {
             return res
         }
+    }
+
+    private suspend fun loadCityFromCache(): List<CityCollection>? {
+        return networkCacheDataSource.loadCache(
+            CITIES_PATH,
+            object : TypeToken<List<CityCollection>>() {}.type
+        )
     }
 }

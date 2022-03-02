@@ -12,11 +12,11 @@ class LandingRepository(
     private val dishesDataSource: DishesDataSource = DishesDataSource(context)
 ) {
 
-    suspend fun loadListCities() = withContext(defaultDispatcher) {
-        citiesDataSource.loadListCity()
+    suspend fun loadListCities(loadFromCache: Boolean = false) = withContext(defaultDispatcher) {
+        citiesDataSource.loadListCity(loadFromCache = loadFromCache)
     }
 
-    suspend fun loadListDishes() = withContext(defaultDispatcher) {
-        dishesDataSource.loadListDishes()
+    suspend fun loadListDishes(loadFromCache: Boolean = false) = withContext(defaultDispatcher) {
+        dishesDataSource.loadListDishes(loadFromCache = loadFromCache)
     }
 }
