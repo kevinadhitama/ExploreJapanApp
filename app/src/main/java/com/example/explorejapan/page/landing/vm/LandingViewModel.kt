@@ -1,7 +1,9 @@
 package com.example.explorejapan.page.landing.vm
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.explorejapan.R
 import com.example.explorejapan.datamodel.landing.LandingItem
 import com.example.explorejapan.page.landing.vm.LandingUiState.Empty
 import com.example.explorejapan.page.landing.vm.LandingUiState.ErrorPage
@@ -14,10 +16,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.lang.ref.WeakReference
 
 const val EMPTY_DUE_ERROR = -1
 
 class LandingViewModel(
+    private val context: WeakReference<Context>,
     private val repository: LandingRepository,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
@@ -52,7 +56,12 @@ class LandingViewModel(
         val res = result.body()
         res?.let {
             val data = listOf(
-                LandingItem(isHeader = true, title = "Main Cities in Japan")
+                LandingItem(
+                    isHeader = true,
+                    title = context.get()?.getString(
+                        R.string.section_title_main_cities_japan
+                    ) ?: ""
+                )
             ).plus(res.map {
                 LandingItem(
                     title = it.name,
@@ -83,7 +92,12 @@ class LandingViewModel(
         val res = result.body()
         res?.let {
             val data = listOf(
-                LandingItem(isHeader = true, title = "Most Popular Japanese Food")
+                LandingItem(
+                    isHeader = true,
+                    title = context.get()?.getString(
+                        R.string.section_title_popular_japanese_food
+                    ) ?: ""
+                )
             ).plus(res.map {
                 LandingItem(
                     title = it.name,

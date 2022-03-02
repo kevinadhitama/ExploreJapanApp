@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Explore Japan</string>
+    <string name="section_title_main_cities_japan">Main Cities in Japan</string>
+    <string name="section_title_popular_japanese_food">Most Popular Japanese Food</string>
+
 </resources>

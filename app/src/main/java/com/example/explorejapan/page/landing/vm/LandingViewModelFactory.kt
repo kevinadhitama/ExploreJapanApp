@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.explorejapan.repository.LandingRepository
+import java.lang.ref.WeakReference
 
 class LandingViewModelFactory constructor(
     private val context: Context,
@@ -14,7 +15,7 @@ class LandingViewModelFactory constructor(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(LandingViewModel::class.java)) {
-            LandingViewModel(this.repository) as T
+            LandingViewModel(WeakReference(context), this.repository) as T
         } else {
             throw IllegalArgumentException("ViewModel Not Found")
         }
