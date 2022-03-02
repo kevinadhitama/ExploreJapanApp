@@ -1,5 +1,6 @@
 package com.example.explorejapan.page.landing.ui.list.adapter.viewholder
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -25,8 +26,10 @@ class ContentViewHolder(private val binding: LandingListItemBinding) :
 
         data.description?.let {
             binding.landingListItemTextViewDesc.text = TextUtil.fromHtml(it)
+            binding.landingListItemTextViewDesc.visibility = View.VISIBLE
         } ?: run {
             binding.landingListItemTextViewDesc.text = ""
+            binding.landingListItemTextViewDesc.visibility = View.GONE
         }
 
         binding.root.setOnClickListener {
